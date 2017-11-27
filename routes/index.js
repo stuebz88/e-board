@@ -53,8 +53,6 @@ router.get('/',function(req,res,next) {
                     // Combine adjacent shifts
                     for(var k=firstOf; k<sched.length; k++)
                     {
-                        console.log(startDate+' '+sched[k][1]);
-                        console.log(endDate+' '+sched[k][0]);
                         if(dateEquals(startDate,sched[k][1]))
                         {
                             startDate = sched[k][0];
