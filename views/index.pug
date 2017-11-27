@@ -1,0 +1,28 @@
+extends layout
+
+block content
+    div(class='container-fluid')
+        div(class='row' style='height:30vh;')
+            div(class='span7')
+                h2 Tips
+            div(class='span6')
+                h2 Notices
+        div(class='row')
+            div(class='span7')
+                h2 IT Out
+            div(class='span6')
+                h2 Schedule
+                table(class='table table-striped')
+                    thead
+                        tr
+                            th Time
+                            th Name
+                            th Voicemail
+                            th Email
+                    tbody
+                        each entry in schedule
+                            tr
+                                td=entry[0].toLocaleTimeString().slice(0,-6)+'-'+entry[1].toLocaleTimeString().slice(0,-6)
+                                td=entry[2]
+                                td
+                                td
