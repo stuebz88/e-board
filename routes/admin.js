@@ -8,17 +8,9 @@ router.get('/',function(req,res,next) {
     Emp.find(function(err,result) {
         res.render('admin',{emps: result});
     });
-    /*
-    async.series([function(callback) {
-        Emp.find(function(err,emps) {
-            callback(err,emps)
-        });
-    }], function(err,results) {
-        res.render('admin',{emps: results});
-    });*/
 });
 
-function add() {
+function addTest() {
     var test = new Emp({url:'http://www.schedulesource.net/Enterprise/Public/EmployeeSchedule.aspx?&id=C6E25BA5-197A-4787-855B-F3A5AB65D391&format=ical',name:'Vaj, Ntxawm',nickname:'Zer'});
     test.save(function(err,result) {
         if(err)

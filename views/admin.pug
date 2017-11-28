@@ -9,12 +9,22 @@ block content
             div(class='span3')
                 h3 Nickname
         each entry in emps
-            div(class='row')
+            form(method='POST',action='')
+                div(class='row')
+                    div(class='span3')
+                        p=entry.name
+                    div(class='span3')
+                        div.form-group
+                            input#nickname.form-control(type='text',name='name',value=entry.nickname)
+                    div(class='span3')
+                        button.btn.btn-primary(type='submit') Submit
+        h2 Add new worker
+        div(class='row')
+            form(method='POST',action='')
                 div(class='span3')
-                    p=entry.name
+                    p Enter URL of ICAL data:
                 div(class='span3')
                     div.form-group
-                        input#name.form-control(type='text',name='name',value=test)
+                        input#url.form-control(type='text')
                 div(class='span3')
                     button.btn.btn-primary(type='submit') Submit
-        h2 Add new worker
