@@ -12,8 +12,10 @@ var urls = ['http://www.schedulesource.net/Enterprise/Public/EmployeeSchedule.as
     'http://www.schedulesource.net/Enterprise/Public/EmployeeSchedule.aspx?&id=C6E25BA5-197A-4787-855B-F3A5AB65D391&format=ical',
     'http://www.schedulesource.net/Enterprise/Public/EmployeeSchedule.aspx?&id=204B792C-1659-4D28-AF19-28C054391174&format=ical',
     'http://www.schedulesource.net/Enterprise/Public/EmployeeSchedule.aspx?&id=770EAAC0-2108-48B1-819A-DB2881DEF3D3&format=ical',
-    'http://www.schedulesource.net/Enterprise/Public/EmployeeSchedule.aspx?&id=FA91B797-12E8-43FF-ACA2-E1A7DC14128B&format=ical'];
-var names = ['Teagan','Erica','Zer','Derek','Jenna','Tyler'];
+    'http://www.schedulesource.net/Enterprise/Public/EmployeeSchedule.aspx?&id=FA91B797-12E8-43FF-ACA2-E1A7DC14128B&format=ical',
+    'http://www.schedulesource.net/Enterprise/Public/EmployeeSchedule.aspx?&id=CA552515-132D-4D79-96EF-46F739180BD1&format=ical',
+    'http://www.schedulesource.net/Enterprise/Public/EmployeeSchedule.aspx?&id=24978199-AFF3-4885-8B53-03C02A283B04&format=ical'];
+var names = ['Teagan','Erica','Zer','Derek','Jenna','Tyler','Austin','Zoe'];
 
 router.get('/',function(req,res,next) {
     async.mapSeries(urls, function(url,callback) {
