@@ -16,9 +16,16 @@ router.post('/rename',function(req,res,next) {
     req.sanitize('name').escape();
     req.sanitize('name').trim();
     req.sanitize('url').trim();
-    console.log('==Rename==');
-    console.log(req.body);
-    res.redirect('/admin');
+    if(req.body.submit) {
+        // Update the record
+        Emp.findOneAndUpdate({url:req.body.url},{nickname:req.body.name},function(err,result) {
+            res.redirect('/admin');
+        });
+    } else if(req.body.delete) {
+        Emp.remove({url:req.body.url},function(err) {
+            res.redirect('/admin');
+        });
+    }
 });
 
 router.post('/',function(req,res,next) {
@@ -33,12 +40,12 @@ router.post('/',function(req,res,next) {
                 // Puts ical data into jcal format
                 callback(null,ICAL.parse(Buffer.concat(chunks).toString()));
             });
-        }).catch(err => catchError(res))
+        }).catch(function(err) {
             // If URL is not valid, this is called
             Emp.find(function(err,result) {
-                res.render('admin',{emps: result,err:'URL does not link to valid ical data.'});
-                return;
+                res.render('admin',{emps: result,err:'The URL did not link to valid ICAL data.'});
             });
+        });
     }, function(jcal,callback) {
         // Get name from jcal, which is stored in jcal[1][4][3]
         var entry = new Emp({url:req.body.url,name:jcal[1][4][3].substring(19),nickname:''});
@@ -50,7 +57,7 @@ router.post('/',function(req,res,next) {
             callback(null,null);
         });
     }], function(err,results) {
-        res.render('admin',{emps:result});
+        res.redirect('/admin');
      });
 });
 

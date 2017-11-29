@@ -20,7 +20,8 @@ block content
                             label(for='nickname',class='visuallyhidden')
                             input#nickname.form-control(type='text',name='name',value=entry.nickname)
                     div(class='span3')
-                        button.btn.btn-primary(type='submit') Submit
+                        button.btn.btn-primary(type='submit',name='submit',value='submit') Update
+                        button.btn.btn-primary(type='submit',name='delete',value='delete',style='background:#FF0000') Delete
         h2 Add new worker
         div(class='row')
             form(method='POST',action='/admin')
