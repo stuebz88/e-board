@@ -12,17 +12,6 @@ router.get('/',function(req,res,next) {
     });
 });
 
-function addTest() {
-    var test = new Emp({url:'http://www.schedulesource.net/Enterprise/Public/EmployeeSchedule.aspx?&id=C6E25BA5-197A-4787-855B-F3A5AB65D391&format=ical',name:'Vaj, Ntxawm',nickname:'Zer'});
-    test.save(function(err,result) {
-        if(err)
-        {
-            return console.log(err);
-        }
-        console.log(test.name);
-    });
-}
-
 router.post('/rename',function(req,res,next) {
     req.sanitize('name').escape();
     req.sanitize('name').trim();
@@ -32,11 +21,10 @@ router.post('/rename',function(req,res,next) {
     res.redirect('/admin');
 });
 
-router.post('/add',function(req,res,next) {
+router.post('/',function(req,res,next) {
     async.waterfall([function(callback) {
         // Retrieves ical data from url provided
-        fetch(req.body.url,{body : String})
-        .then(function(ical) {
+        fetch(req.body.url,{body : String}).then(function(ical) {
             const chunks = [];
             ical.body.on("data",function(chunk) {
                 chunks.push(chunk);
@@ -45,19 +33,24 @@ router.post('/add',function(req,res,next) {
                 // Puts ical data into jcal format
                 callback(null,ICAL.parse(Buffer.concat(chunks).toString()));
             });
-        });
+        }).catch(err => catchError(res))
+            // If URL is not valid, this is called
+            Emp.find(function(err,result) {
+                res.render('admin',{emps: result,err:'URL does not link to valid ical data.'});
+                return;
+            });
     }, function(jcal,callback) {
-        // Get name from jcal
+        // Get name from jcal, which is stored in jcal[1][4][3]
         var entry = new Emp({url:req.body.url,name:jcal[1][4][3].substring(19),nickname:''});
         entry.save(function(err,result) {
             if(err)
             {
                 return console.log(err);
             }
-            callback(null,'success');
+            callback(null,null);
         });
     }], function(err,results) {
-         res.redirect('/admin');
+        res.render('admin',{emps:result});
      });
 });
 

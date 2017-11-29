@@ -23,7 +23,7 @@ block content
                         button.btn.btn-primary(type='submit') Submit
         h2 Add new worker
         div(class='row')
-            form(method='POST',action='/admin/add')
+            form(method='POST',action='/admin')
                 div(class='span3')
                     p Enter URL of ICAL data:
                 div(class='span3')
@@ -31,3 +31,4 @@ block content
                         input#url.form-control(type='text',name='url',required='true')
                 div(class='span3')
                     button.btn.btn-primary(type='submit') Submit
+        p(style='color:#FF0000')=err
