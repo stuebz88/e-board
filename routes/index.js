@@ -2,25 +2,20 @@ var express = require('express');
 var fetch = require('node-fetch');
 var ical = require('ical.js');
 var async = require('async');
+var mongoose = require('mongoose');
+var Emp = require('../models/emp');
 var router = express.Router();
 
-/*
- * Students' information. Will be replaced with a database at some point.
- */
-var urls = ['http://www.schedulesource.net/Enterprise/Public/EmployeeSchedule.aspx?&id=B3AE6962-6C82-4A6E-9170-6BD0426F88EE&format=ical',
-    'http://www.schedulesource.net/Enterprise/Public/EmployeeSchedule.aspx?&id=D3A7AA58-6926-4A9D-86D9-E968880B0D08&format=ical',
-    'http://www.schedulesource.net/Enterprise/Public/EmployeeSchedule.aspx?&id=C6E25BA5-197A-4787-855B-F3A5AB65D391&format=ical',
-    'http://www.schedulesource.net/Enterprise/Public/EmployeeSchedule.aspx?&id=204B792C-1659-4D28-AF19-28C054391174&format=ical',
-    'http://www.schedulesource.net/Enterprise/Public/EmployeeSchedule.aspx?&id=770EAAC0-2108-48B1-819A-DB2881DEF3D3&format=ical',
-    'http://www.schedulesource.net/Enterprise/Public/EmployeeSchedule.aspx?&id=FA91B797-12E8-43FF-ACA2-E1A7DC14128B&format=ical',
-    'http://www.schedulesource.net/Enterprise/Public/EmployeeSchedule.aspx?&id=CA552515-132D-4D79-96EF-46F739180BD1&format=ical',
-    'http://www.schedulesource.net/Enterprise/Public/EmployeeSchedule.aspx?&id=24978199-AFF3-4885-8B53-03C02A283B04&format=ical'];
-var names = ['Teagan','Erica','Zer','Derek','Jenna','Tyler','Austin','Zoe'];
-
 router.get('/',function(req,res,next) {
-    async.mapSeries(urls, function(url,callback) {
+    Emp.find(function(err,result) {
+        getSchedule(res,result);
+    });
+});
+
+function getSchedule(res,emps) {
+    async.mapSeries(emps, function(emp,callback) {
         // Retrieves ical data from url provided
-        fetch(url,{body : String})
+        fetch(emp.url,{body : String})
         .then(function(ical) {
             const chunks = [];
             ical.body.on("data",function(chunk) {
@@ -28,7 +23,8 @@ router.get('/',function(req,res,next) {
             });
             ical.body.on("end",function(chunk) {
                 // Puts ical data into jcal format
-                callback(null,ICAL.parse(Buffer.concat(chunks).toString()));
+                var name = emp.nickname ? emp.nickname : emp.name;
+                callback(null,[name,ICAL.parse(Buffer.concat(chunks).toString())]);
             });
         });
     }, function(err,results) {
@@ -36,7 +32,7 @@ router.get('/',function(req,res,next) {
         var today = new Date();
         for(var i=0; i<results.length; i++)
         {
-            var comp = new ICAL.Component(results[i]);
+            var comp = new ICAL.Component(results[i][1]);
             var events = comp.getAllSubcomponents('vevent');
             // Get the index of sched with the first entry for this person
             var firstOf = sched.length;
@@ -57,18 +53,20 @@ router.get('/',function(req,res,next) {
                     {
                         if(dateEquals(startDate,sched[k][1]))
                         {
+                            console.log('merging1 '+results[i][0]+' '+sched[k][1]+startDate);
                             startDate = sched[k][0];
                             sched = sched.splice(sched,k);
                             break;
                         }
                         else if(dateEquals(endDate,sched[k][0]))
                         {
+                            console.log('merging2 '+results[i][0]+' '+endDate+sched[k][0]);
                             endDate = sched[k][1];
                             sched = sched.splice(sched,k);
                             break;
                         }
                     }
-                    sched.push([startDate,endDate,names[i]]);
+                    sched.push([startDate,endDate,results[i][0]]);
                 }
             }
         }
@@ -82,7 +80,7 @@ router.get('/',function(req,res,next) {
         // Draw HTML page
         res.render('index',{title : 'Help Desk E-Board', schedule : sched});
     });
-});
+}
 
 function dateEquals(a,b)
 {
