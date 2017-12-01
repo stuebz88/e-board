@@ -76,8 +76,15 @@ function getSchedule(res,emps) {
             else if(a[1]<b[1]) return -1;
             else return 1;
         });
-        // Draw HTML page
-        res.render('index',{title : 'Help Desk E-Board', schedule : sched});
+        // Get calendar data and draw HTML page
+        gcal.getITOut(function(cal) {
+            res.render('index',{title : 'Help Desk E-Board', schedule : sched, itout : cal});
+        });
+        /*
+        getSchedule(function(calData) {
+            res.render('index',{title : 'Help Desk E-Board', schedule : sched, itout: calData});
+        });
+        */
     });
 }
 
