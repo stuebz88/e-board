@@ -4,6 +4,7 @@ var ical = require('ical.js');
 var async = require('async');
 var mongoose = require('mongoose');
 var Emp = require('../models/emp');
+var gcal = require('../google/gcal')
 var router = express.Router();
 
 router.get('/',function(req,res,next) {
@@ -51,16 +52,14 @@ function getSchedule(res,emps) {
                     // Combine adjacent shifts
                     for(var k=firstOf; k<sched.length; k++)
                     {
-                        if(dateEquals(startDate,sched[k][1]))
+                        if(startDate.getTime()===sched[k][1].getTime())
                         {
-                            console.log('merging1 '+results[i][0]+' '+sched[k][1]+startDate);
                             startDate = sched[k][0];
                             sched = sched.splice(sched,k);
                             break;
                         }
-                        else if(dateEquals(endDate,sched[k][0]))
+                        else if(endDate.getTime()===sched[k][0].getTime())
                         {
-                            console.log('merging2 '+results[i][0]+' '+endDate+sched[k][0]);
                             endDate = sched[k][1];
                             sched = sched.splice(sched,k);
                             break;
@@ -80,14 +79,6 @@ function getSchedule(res,emps) {
         // Draw HTML page
         res.render('index',{title : 'Help Desk E-Board', schedule : sched});
     });
-}
-
-function dateEquals(a,b)
-{
-    if(a.hours==b.hours && a.minutes==b.minutes) {
-        return true;
-    }
-    return false;
 }
 
 module.exports = router;
