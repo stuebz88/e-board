@@ -128,7 +128,7 @@ function listEvents(auth) {
 }
 
 module.exports = {
-    getITOut: function(callback) {
-        callback('Hello');
+    getITOut: function() {
+        return 'Hello';
     }
 }
