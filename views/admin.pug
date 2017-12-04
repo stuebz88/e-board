@@ -1,35 +1,43 @@
 extends layout
 
 block content
-    div(class='container-fluid')
+    .container-fluid
+        h2 Edit notices
+        form(method='POST',action='/admin/notices')
+            .row
+                .span6
+                    textarea(name='notices' rows='10' style='width:600px;')=notices[0].text
+            .row
+                .span6
+                    button.btn.btn-primary(type='submit',name='noticeBtn',value='Update') Update
         h2 Edit existing workers
-        div(class='row')
-            div(class='span3')
+        .row
+            .span3
                 h3 Name
-            div(class='span3')
+            .span3
                 h3 Nickname
         each entry in emps
             form(method='POST',action='/admin/rename')
-                div(class='row')
-                    div(class='span3')
+                .row
+                    .span3
                         p=entry.name
-                    div(class='span3')
-                        div.form-group
+                    .span3
+                        .form-group
                             label(for='url',class='visuallyhidden')
                             input#url.form-control(type='hidden',name='url',value=entry.url)
                             label(for='nickname',class='visuallyhidden')
                             input#nickname.form-control(type='text',name='name',value=entry.nickname)
-                    div(class='span3')
+                    .span3
                         button.btn.btn-primary(type='submit',name='submit',value='submit') Update
                         button.btn.btn-primary(type='submit',name='delete',value='delete',style='background:#FF0000') Delete
         h2 Add new worker
-        div(class='row')
+        .row
             form(method='POST',action='/admin')
-                div(class='span3')
+                .span3
                     p Enter URL of ICAL data:
-                div(class='span3')
+                .span3
                     div.form-group
                         input#url.form-control(type='text',name='url',required='true')
-                div(class='span3')
+                .span3
                     button.btn.btn-primary(type='submit') Submit
         p(style='color:#FF0000')=err

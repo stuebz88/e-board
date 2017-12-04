@@ -4,11 +4,34 @@ var ical = require('ical.js');
 var fetch = require('node-fetch');
 var mongoose = require('mongoose');
 var Emp = require('../models/emp');
+var Notices = require('../models/notices');
 var router = express.Router();
 
 router.get('/',function(req,res,next) {
-    Emp.find(function(err,result) {
-        res.render('admin',{emps: result});
+    async.parallel([function(callback) {
+        Emp.find(function(err,result) {
+            callback(err,result)
+        });
+    }, function(callback) {
+        Notices.find(function(err,result) {
+            callback(err,result);
+        });
+    }], function(err,result) {
+        res.render('admin',{emps: result[0], notices: result[1]});
+    });
+});
+
+router.post('/notices',function(req,res,next) {
+    async.series([function(callback) {
+        Notices.remove(function(err,removed) {
+            callback(err,removed);
+        });
+    }, function(callback) {
+        new Notices({text: req.body.notices}).save(function(err,result) {
+            callback(err,result);
+        });
+    }], function(err,results) {
+        res.redirect('/admin');
     });
 });
 

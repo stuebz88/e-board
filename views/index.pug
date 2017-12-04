@@ -3,12 +3,13 @@ extends layout
 block content
     div(class='container-fluid')
         div(class='row' style='height:30vh;')
-            div(class='span7')
+            div(class='span6')
                 h2 Tips
             div(class='span6')
                 h2 Notices
+                p=notices[0].text
         div(class='row')
-            div(class='span7')
+            div(class='span6')
                 h2 IT Out
                 p=itout
             div(class='span6')
