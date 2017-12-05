@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 var Emp = require('../models/emp');
 var Notices = require('../models/notices');
 var Roles = require('../models/roles');
+var Tip = require('../models/tip');
 var gcal = require('../google/gcal');
 var router = express.Router();
 
@@ -20,9 +21,13 @@ router.get('/',function(req,res,next) {
         Notices.find(function(err,notices) {
             callback(null,notices);
         });
+    }, function(callback) {
+        Tip.find(function(err,tips) {
+            callback(null,tips);
+        })
     }], function(err,result) {
         generateRoles(result[0],function(roles) {
-            res.render('index',{title : 'Help Desk E-Board', schedule : result[0], itout : result[1], notices : result[2], roles: roles});
+            res.render('index',{title : 'Help Desk E-Board', schedule : result[0], itout : result[1], notices : result[2], tips : result[3], roles: roles});
         });
     });
 });
@@ -101,12 +106,6 @@ function getSchedule(res,callback) {
     });
 }
 
-function getNotices() {
-    Notices.find(function(err,notices) {
-        return notices;
-    });
-}
-
 function generateRoles(shifts,callback) {
     var roles = [];
     Roles.find(function(err,role) {
@@ -135,14 +134,12 @@ function generateRoles(shifts,callback) {
                     roles.push(curRole);
                 }
             }
-            console.log('Roles: '+roles);
             callback(roles);
         }
     });
 }
 
 router.post('/pickRole',function(req,res,next) {
-    console.log(req.body);
     Roles.find(function(err,role) {
         var today = new Date();
         if(role.length==0 ||

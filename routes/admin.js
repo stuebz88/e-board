@@ -5,6 +5,7 @@ var fetch = require('node-fetch');
 var mongoose = require('mongoose');
 var Emp = require('../models/emp');
 var Notices = require('../models/notices');
+var Tip = require('../models/tip');
 var router = express.Router();
 
 router.get('/',function(req,res,next) {
@@ -82,6 +83,25 @@ router.post('/',function(req,res,next) {
     }], function(err,results) {
         res.redirect('/admin');
      });
+});
+
+router.get('/tips',function(req,res,next) {
+    Tip.find(function(err,result) {
+        res.render('tips',{tips:result});
+    });
+});
+
+router.post('/tips/add',function(req,res,next) {
+    new Tip({text:req.body.tip}).save(function() {
+        res.redirect('/admin/tips');
+    });
+});
+
+router.post('/tips/remove',function(req,res,next) {
+    console.log(req.body);
+    Tip.remove({text:req.body.deleteBtn},function(err) {
+        res.redirect('/admin/tips');
+    });
 });
 
 module.exports = router;

@@ -1,0 +1,20 @@
+extends layout
+
+block content
+    .container-fluid
+        h2 Tips
+        each tip in tips
+            form(method='POST',action='/admin/tips/remove')
+                .row
+                    .span6
+                        p=tip.text
+                    .span6
+                        button.btn.btn-primary(type='submit',name='deleteBtn',style='background:#FF0000',value=tip.text) Delete
+        h2 Add new tip
+            form(method='POST',action='/admin/tips/add')
+                .row
+                    .span6
+                        textarea(name='tip' rows='5' style='width:600px;')
+                .row
+                    .span6
+                        button.btn.btn-primary(type='submit',name='submitBtn',value='Submit') Submit

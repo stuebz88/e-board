@@ -5,6 +5,7 @@ block content
         .row(style='height:30vh;')
             .span6
                 h2 Tips
+                p#tip Original
             .span6
                 h2 Notices
                 p=notices[0].text
@@ -41,3 +42,13 @@ block content
                                         td
                                             button.btn.btn-primary(type='submit',name='email',value=i,style='background:#FF0000') Pick
                                 - i++;
+                                
+block scripts
+    script.
+        var tips =!{JSON.stringify(tips)};
+        var i=0;
+        setInterval(function() {
+            document.getElementById('tip').innerHTML = tips[i].text;
+            i = (i+1)%tips.length;
+        }, 1000);
+        
