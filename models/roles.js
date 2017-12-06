@@ -3,7 +3,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var RolesSchema = new Schema({
-    role: {type: Number},
+    conflicts: [Number],
+    conflictTimes: [String],
     date: {type: Date}
 });
 

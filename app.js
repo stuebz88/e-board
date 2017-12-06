@@ -11,7 +11,9 @@ var index = require('./routes/index');
 var admin = require('./routes/admin');
 
 var app = express();
-
+//app.set('port', process.env.PORT || 8000);
+app.set('port', process.env.PORT || 8000);
+app.listen(app.get('port'));
 /*
  *  Connects to MongoDB hosted on mLab
  */

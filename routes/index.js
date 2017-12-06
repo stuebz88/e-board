@@ -111,27 +111,43 @@ function generateRoles(shifts,callback) {
     var roles = [];
     Roles.find(function(err,role) {
         var today = new Date();
-        if(role.length==0 ||
-            role[0].date.getDate()!=today.getDate() ||
-            role[0].date.getMonth()!=today.getMonth())
+        if(role.length>0 &&
+            (role[0].date.getDate()!=today.getDate() ||
+            role[0].date.getMonth()!=today.getMonth()))
         {
             Roles.remove(function(err) {
                 callback(roles);
             });
         }
-        else
-        {
-            var curRole = role[0].role;
+
+        if(role.length==0) {
+            roles.push(-2);
+            roles.push(-1);
+            callback(roles);
+        } else {
+            var curRole = role[0].conflicts[0]
             roles.push(curRole);
-            for(var i=1; i<shifts.length; i++)
-            {
-                if(shifts[i][0].getTime()<shifts[i-1][1].getTime())
-                {
+            var curConflict = 0;
+            for(var i=1; i<shifts.length; i++) {
+                // If start times are equal
+                if(shifts[i][0].getTime()==shifts[i-1][0].getTime()) {
+                    // If this conflict is not yet resolved
+                    if(role[0].conflicts.length<curConflict+1) {
+                        roles.pop();
+                        roles.push(-2);
+                        roles.push(-1);
+                        break;
+                    } else {
+                        // Push resolution of conflict
+                        roles.pop();
+                        roles.push(role[0].conflicts[curConflict]);
+                        curRole = (role[0].conflicts[curConflict++]+1)%2;
+                        roles.push(curRole);
+                    }
+                } else if(shifts[i][0].getTime()<shifts[i-1][1].getTime()) {
                     curRole = (curRole+1)%2;
                     roles.push(curRole);
-                }
-                else
-                {
+                } else {
                     roles.push(curRole);
                 }
             }
@@ -144,16 +160,17 @@ router.post('/pickRole',function(req,res,next) {
     Roles.find(function(err,role) {
         var today = new Date();
         if(role.length==0 ||
-            role[0].date.getDate()!=today.getDate() ||
-            role[0].date.getMonth()!=today.getMonth())
+            (role[0].date.getDate()!=today.getDate() ||
+            role[0].date.getMonth()!=today.getMonth()))
         {
             Roles.remove(function(err) {
-                if(req.body.voicemail === '0') {
-                    new Roles({role:0,date:new Date()}).save(function() {
+                var data = JSON.parse(req.body.voicemail ? req.body.voicemail : req.body.email);
+                if(typeof req.body.voicemail !== 'undefined' && data[0] === -2) {
+                    new Roles({conflicts:[0],conflictTimes:[data[1]],date:new Date()}).save(function() {
                         res.redirect('/');
                     });
                 } else {
-                    new Roles({role:1,date:new Date()}).save(function() {
+                    new Roles({conflicts:[1],conflictTimes:[data[1]],date:new Date()}).save(function() {
                         res.redirect('/');
                     });
                 }
@@ -161,7 +178,19 @@ router.post('/pickRole',function(req,res,next) {
         }
         else
         {
-            res.redirect('/');
+            var data = JSON.parse(req.body.voicemail ? req.body.voicemail : req.body.email);
+            // Make sure the conflict is not already resolved
+            if(role[0].conflictTimes.indexOf(data[1])<0) {
+                role[0].conflictTimes.push(data[1]);
+                if(typeof req.body.voicemail !== 'undefined' && data[0]==-2) {
+                    role[0].conflicts.push(0);
+                } else {
+                    role[0].conflicts.push(1);
+                }
+                role[0].save(function() {
+                    res.redirect('/');
+                });
+            }
         }
     });
 });

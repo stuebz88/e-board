@@ -26,24 +26,42 @@ block content
                         - var i = 0;
                         each entry in schedule
                             tr
+                                - var startTime = entry[0].toLocaleTimeString().slice(0,-6)
                                 td=entry[0].toLocaleTimeString().slice(0,-6)+'-'+entry[1].toLocaleTimeString().slice(0,-6)
                                 td=entry[2]
-                                if roles.length>0 || entry[0].toLocaleTimeString().slice(0,-6) !== '7:30'
+                                if roles[i]<0
+                                    form(method='POST',action='/pickRole')
+                                        td
+                                            button.btn.btn-primary(type='submit',name='voicemail',value=[roles[i],startTime]) Pick
+                                        td
+                                            button.btn.btn-primary(type='submit',name='email',value=[roles[i],startTime],style='background:#FF0000') Pick
+                                else if roles[i]>=0
                                     if roles[i]
                                         td
                                         td(style='text-align:center') &#10004;
-                                    else if roles.length>0
+                                    else
                                         td(style='text-align:center') &#10004;
                                         td
-                                    else
-                                        td
-                                        td
                                 else
-                                    form(method='POST',action='/pickRole')
-                                        td
-                                            button.btn.btn-primary(type='submit',name='voicemail',value=i) Pick
-                                        td
-                                            button.btn.btn-primary(type='submit',name='email',value=i,style='background:#FF0000') Pick
+                                    td
+                                    td
+                                //-        
+                                    if roles.length>0 || entry[0].toLocaleTimeString().slice(0,-6) !== '7:30'
+                                        if roles[i]
+                                            td
+                                            td(style='text-align:center') &#10004;
+                                        else if roles.length>0
+                                            td(style='text-align:center') &#10004;
+                                            td
+                                        else
+                                            td
+                                            td
+                                    else
+                                        form(method='POST',action='/pickRole')
+                                            td
+                                                button.btn.btn-primary(type='submit',name='voicemail',value=i) Pick
+                                            td
+                                                button.btn.btn-primary(type='submit',name='email',value=i,style='background:#FF0000') Pick
                                 - i++;
                                 
 block scripts
