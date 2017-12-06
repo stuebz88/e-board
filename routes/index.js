@@ -141,9 +141,10 @@ function generateRoles(shifts,callback) {
                         // Push resolution of conflict
                         roles.pop();
                         roles.push(role[0].conflicts[curConflict]);
-                        curRole = (role[0].conflicts[curConflict++]+1)%2;
+                        curRole = (role[0].conflicts[curConflict]+1)%2;
                         roles.push(curRole);
                     }
+                    curConflict++;
                 } else if(shifts[i][0].getTime()<shifts[i-1][1].getTime()) {
                     curRole = (curRole+1)%2;
                     roles.push(curRole);
@@ -165,7 +166,8 @@ router.post('/pickRole',function(req,res,next) {
         {
             Roles.remove(function(err) {
                 var data = JSON.parse(req.body.voicemail ? req.body.voicemail : req.body.email);
-                if(typeof req.body.voicemail !== 'undefined' && data[0] === -2) {
+                if((typeof req.body.voicemail !== 'undefined' && data[0] === -2) ||
+                    (typeof req.body.email !== 'undefined' && data[0] === -1)) {
                     new Roles({conflicts:[0],conflictTimes:[data[1]],date:new Date()}).save(function() {
                         res.redirect('/');
                     });
@@ -175,14 +177,13 @@ router.post('/pickRole',function(req,res,next) {
                     });
                 }
             });
-        }
-        else
-        {
+        } else {
             var data = JSON.parse(req.body.voicemail ? req.body.voicemail : req.body.email);
             // Make sure the conflict is not already resolved
             if(role[0].conflictTimes.indexOf(data[1])<0) {
                 role[0].conflictTimes.push(data[1]);
-                if(typeof req.body.voicemail !== 'undefined' && data[0]==-2) {
+                if((typeof req.body.voicemail !== 'undefined' && data[0]==-2) ||
+                    (typeof req.body.email !== 'undefined' && data[0]==-1)) {
                     role[0].conflicts.push(0);
                 } else {
                     role[0].conflicts.push(1);
