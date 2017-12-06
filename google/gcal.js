@@ -59,6 +59,11 @@ function getNewToken(oauth2Client, callback) {
     scope: SCOPES
   });
   console.log('Authorize this app by visiting this url: ', authUrl);
+  var stream = fs.createWriteStream('url.txt');
+  stream.once('open',function(fd) {
+     stream.write(authUrl);
+     stream.end(); 
+  });
   var rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
