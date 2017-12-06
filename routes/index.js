@@ -27,7 +27,6 @@ router.get('/',function(req,res,next) {
         })
     }], function(err,result) {
         generateRoles(result[0],function(roles) {
-            console.log(roles);
             res.render('index',{title : 'Help Desk E-Board', schedule : result[0], itout : result[1], notices : result[2], tips : result[3], roles: roles});
         });
     });
