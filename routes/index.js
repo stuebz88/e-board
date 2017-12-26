@@ -25,7 +25,7 @@ router.get('/',function(req,res,next) {
 
 function getSchedule(callback) {
     async.waterfall([
-        findAllEmps(),
+        findAllEmps,
         makeSchedule
     ], function(err,sched) {
         console.log(sched);
