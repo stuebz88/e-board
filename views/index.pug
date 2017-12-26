@@ -2,67 +2,62 @@ extends layout
 
 block content
     .container-fluid
-        .row(style='height:30vh;')
-            .span6
-                h2 Tips
-                p#tip Original
-            .span6
-                h2 Notices
-                p=notices[0].text
-        .row
-            .span6
-                h2 IT Out
-                p=itout
-            .span6
-                h2 Schedule
-                table(class='table table-striped')
-                    thead
-                        tr
-                            th Time
-                            th Name
-                            th(style='text-align:center') Voicemail
-                            th(style='text-align:center') Email
-                    tbody
-                        - var i = 0;
-                        each entry in schedule
-                            tr
-                                - var startTime = entry[0].toLocaleTimeString().slice(0,-6)
-                                td=entry[0].toLocaleTimeString().slice(0,-6)+'-'+entry[1].toLocaleTimeString().slice(0,-6)
-                                td=entry[2]
-                                if roles[i]<0
-                                    form(method='POST',action='/pickRole')
-                                        td
-                                            button.btn.btn-primary(type='submit',name='voicemail',value=[roles[i],startTime]) Pick
-                                        td
-                                            button.btn.btn-primary(type='submit',name='email',value=[roles[i],startTime],style='background:#FF0000') Pick
-                                else if roles[i]>=0
-                                    if roles[i]
-                                        td
-                                        td(style='text-align:center') &#10004;
-                                    else
-                                        td(style='text-align:center') &#10004;
-                                        td
+        .row(style='height:100vh;')
+            .span6(style='width:40vw;')
+                .container-fluid
+                    .row(style='height:30vh;')
+                            h2 Tips
+                            p#tip Original
+                    hr(style='width:90vw;border-color:#000000')
+                    .row(style='padding-top:10px')
+                            h2 IT Out
+                            each entry in itout
+                                if entry[3]
+                                    - var start = new Date(entry[2]).toLocaleString('en-US',{ hour: 'numeric',minute:'numeric', hour12: true })
+                                    - var end = new Date(entry[3]).toLocaleString('en-US',{ hour: 'numeric',minute:'numeric', hour12: true })
+                                    p=(entry[1] || entry[0])+' '+start+'-'+end
                                 else
-                                    td
-                                    td
-                                //-        
-                                    if roles.length>0 || entry[0].toLocaleTimeString().slice(0,-6) !== '7:30'
-                                        if roles[i]
-                                            td
-                                            td(style='text-align:center') &#10004;
-                                        else if roles.length>0
-                                            td(style='text-align:center') &#10004;
-                                            td
+                                    p=entry[1] || entry[0]
+                                    p=entry[2]
+            .span6(style='width:40vw;')
+                .container-fluid(style='padding-left:50px;border-left:2px solid #333')
+                    .row(style='height:30vh;')
+                        h2 Notices
+                        p=notices[0].text
+                    hr(style='width:0vw;border-color:#000000')
+                    .row
+                        h2 Schedule
+                        table(class='table table-striped')
+                            thead
+                                tr
+                                    th Time
+                                    th Name
+                                    th(style='text-align:center') Voicemail
+                                    th(style='text-align:center') Email
+                            tbody
+                                - var i = 0;
+                                each entry in schedule
+                                    tr
+                                        - var startTime = entry[0].toLocaleTimeString().slice(0,-6)
+                                        td=entry[0].toLocaleTimeString().slice(0,-6)+'-'+entry[1].toLocaleTimeString().slice(0,-6)
+                                        td=entry[2]
+                                        if roles[i]<0
+                                            form(method='POST',action='/pickRole')
+                                                td
+                                                    button.btn.btn-primary(type='submit',name='voicemail',value=[roles[i],startTime]) Pick
+                                                td
+                                                    button.btn.btn-primary(type='submit',name='email',value=[roles[i],startTime],style='background:#FF0000') Pick
+                                        else if roles[i]>=0
+                                            if roles[i]
+                                                td
+                                                td(style='text-align:center') &#10004;
+                                            else
+                                                td(style='text-align:center') &#10004;
+                                                td
                                         else
                                             td
                                             td
-                                    else
-                                        form(method='POST',action='/pickRole')
-                                            td
-                                                button.btn.btn-primary(type='submit',name='voicemail',value=i) Pick
-                                            td
-                                                button.btn.btn-primary(type='submit',name='email',value=i,style='background:#FF0000') Pick
-                                - i++;
+                                    - i++;
                                 
 block scripts
     script.
