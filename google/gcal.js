@@ -114,7 +114,7 @@ function retrieveFromServer(auth,callback) {
         var start = event.start.dateTime || event.start.date;
         itout.push([event.creator.email,event.creator.displayName,event.start.dateTime,event.end.dateTime]);
       }
-      callback(itout.sort(function(a,b) {
+      callback(null,itout.sort(function(a,b) {
           if(a[0]<b[0]) return -1;
           else if(a[0]>b[0]) return 1;
           else if(a[2]<b[2]) return -1;
