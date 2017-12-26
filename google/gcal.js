@@ -9,17 +9,6 @@ var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + '/.credentials/';
 var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
 
-// Load client secrets from a local file.
-fs.readFile('./ignore/client_secret.json', function processClientSecrets(err, content) {
-  if (err) {
-    console.log('Error loading client secret file: ' + err);
-    return;
-  }
-  // Authorize a client with the loaded credentials, then call the
-  // Google Calendar API.
-  authorize(JSON.parse(content), listEvents);
-});
-
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
  * given callback function.
@@ -28,19 +17,18 @@ fs.readFile('./ignore/client_secret.json', function processClientSecrets(err, co
  * @param {function} callback The callback to call with the authorized client.
  */
 function authorize(credentials, callback) {
-  var clientSecret = credentials.web.client_secret;
-  var clientId = credentials.web.client_id;
-  var redirectUrl = null;//credentials.web.redirect_uris[0];
+  var clientSecret = credentials.installed.client_secret;
+  var clientId = credentials.installed.client_id;
+  var redirectUrl = credentials.installed.redirect_uris[0];
   var auth = new googleAuth();
   var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
-
   // Check if we have previously stored a token.
   fs.readFile(TOKEN_PATH, function(err, token) {
     if (err) {
-      getNewToken(oauth2Client, callback);
+      getNewToken(oauth2Client,callback);
     } else {
       oauth2Client.credentials = JSON.parse(token);
-      callback(oauth2Client);
+      retrieveFromServer(oauth2Client,callback);
     }
   });
 }
@@ -59,11 +47,6 @@ function getNewToken(oauth2Client, callback) {
     scope: SCOPES
   });
   console.log('Authorize this app by visiting this url: ', authUrl);
-  var stream = fs.createWriteStream('url.txt');
-  stream.once('open',function(fd) {
-     stream.write(authUrl);
-     stream.end(); 
-  });
   var rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -77,7 +60,7 @@ function getNewToken(oauth2Client, callback) {
       }
       oauth2Client.credentials = token;
       storeToken(token);
-      callback(oauth2Client);
+      retrieveFromServer(oauth2Client,callback);
     });
   });
 }
@@ -104,16 +87,19 @@ function storeToken(token) {
  *
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
-function listEvents(auth) {
-    console.log('=======Here=======');
+function retrieveFromServer(auth,callback) {
+    var itout = [];
   var calendar = google.calendar('v3');
+  var endOfDay = new Date();
+  endOfDay.setHours(23);
+  endOfDay.setMinutes(59);
   calendar.events.list({
     auth: auth,
-    calendarId: 'primary',
+    calendarId: 'uwosh.edu_37373834323336302d3231@resource.calendar.google.com',
     timeMin: (new Date()).toISOString(),
-    maxResults: 10,
+    timeMax: endOfDay.toISOString(),
+    //maxResults: 10,
     singleEvents: true,
-    orderBy: 'startTime'
   }, function(err, response) {
     if (err) {
       console.log('The API returned an error: ' + err);
@@ -123,18 +109,31 @@ function listEvents(auth) {
     if (events.length == 0) {
       console.log('No upcoming events found.');
     } else {
-      console.log('Upcoming 10 events:');
       for (var i = 0; i < events.length; i++) {
         var event = events[i];
         var start = event.start.dateTime || event.start.date;
-        console.log('%s - %s', start, event.summary);
+        itout.push([event.creator.email,event.creator.displayName,event.start.dateTime,event.end.dateTime]);
       }
+      callback(itout.sort(function(a,b) {
+          if(a[0]<b[0]) return -1;
+          else if(a[0]>b[0]) return 1;
+          else if(a[2]<b[2]) return -1;
+          else return 1;
+      }));
     }
   });
 }
 
 module.exports = {
-    getITOut: function() {
-        return 'Hello';
+    getITOut: function(callback) {
+        fs.readFile('./ignore/client_secret.json', function processClientSecrets(err, content) {
+          if (err) {
+            console.log('Error loading client secret file: ' + err);
+            return;
+          }
+          // Authorize a client with the loaded credentials, then call the
+          // Google Calendar API.
+          authorize(JSON.parse(content), callback);
+        });
     }
 }
