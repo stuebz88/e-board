@@ -24,8 +24,17 @@ img {
     height: 100%;
 }
 
+h1 {
+    text-align: center;
+    color:#E5E5E5
+}
+
+h2 {
+    color:#4444FF
+}
+
 p {
-    color: #000000;
+    color: #E5E5E5;
 }
 
 a {
