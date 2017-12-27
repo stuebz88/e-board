@@ -3,29 +3,28 @@ html(lang="en")
     head
         title= title
         meta(charset='utf-8')
-        //meta(name='viewport', content='width=device-width, initial-scale=1')
+        //-meta(name='viewport', content='width=device-width, initial-scale=1')
         link(rel='stylesheet', href='/bootstrap/css/bootstrap.min.css')
         link(rel='stylesheet', href='/bootstrap/css/bootstrap-responsive.min.css')
         link(rel='stylesheet', href='stylesheets/style.css')
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
         script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
     body
-        div(class='container-fluid')
-            div(class='topnav')
-                div(class='row')
-                    div(class='span2')
-                        table
-                            tbody
-                                tr
-                                    td(style='padding:0 5px 0 0')
-                                        a(href='/') Home
-                                    td(style='padding:0 5px 0 0')
-                                        a(href='/test') Login
-                                    td
-                                        a(href='/admin') Admin
-                    div(class='span10')
-                        h1(style="text-align:center;color:#0000FF") UW Oshkosh IT Help Desk
-                    div(class='span2')
-            div(class='col-sm-10')
-                block content
+        img(src='https://scontent-ort2-1.xx.fbcdn.net/v/t31.0-8/19093000_10155321947798771_386551658638166280_o.jpg?oh=07859745ddd75673bd5f49a795f83381&oe=5AC07790')
+        .bg
+        .container-fluid(style='z-index: 1;')
+            .row
+                .span2
+                    table
+                        tbody
+                            tr
+                                td(style='padding:0 5px 0 0')
+                                    a(href='/') Home
+                                td(style='padding:0 5px 0 0')
+                                    a(href='/test') Login
+                                td
+                                    a(href='/admin') Admin
+            .row
+                h1(style='text-align:center;color:#0000FF') UW Oshkosh IT Help Desk
+            block content
     block scripts
