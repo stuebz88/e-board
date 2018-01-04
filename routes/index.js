@@ -55,7 +55,13 @@ function retrieveIcalData(emp,callback) {
         });
         ical.body.on('end',function(chunk) {
             var name = emp.nickname ? emp.nickname : emp.name;
-            callback(null,[name,ICAL.parse(Buffer.concat(chunks).toString())]);
+            console.log(name);
+            try {
+                callback(null,[name,ICAL.parse(Buffer.concat(chunks).toString())]);
+            } catch(err) {
+
+            }
+            console.log('done');
         });
     });
 }
