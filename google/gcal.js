@@ -16,7 +16,7 @@ var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
  * @param {Object} credentials The authorization client credentials.
  * @param {function} callback The callback to call with the authorized client.
  */
-function authorize(credentials, callback) {
+function authorize(credentials, callback, res) {
   var clientSecret = credentials.installed.client_secret;
   var clientId = credentials.installed.client_id;
   var redirectUrl = credentials.installed.redirect_uris[0];
@@ -24,12 +24,14 @@ function authorize(credentials, callback) {
   var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
   // Check if we have previously stored a token.
   fs.readFile(TOKEN_PATH, function(err, token) {
+      getNewToken(oauth2Client,callback,res);
+      /*
     if (err) {
       getNewToken(oauth2Client,callback);
     } else {
       oauth2Client.credentials = JSON.parse(token);
       retrieveFromServer(oauth2Client,callback);
-    }
+    }*/
   });
 }
 
@@ -41,7 +43,7 @@ function authorize(credentials, callback) {
  * @param {getEventsCallback} callback The callback to call with the authorized
  *     client.
  */
-function getNewToken(oauth2Client, callback) {
+function getNewToken(oauth2Client, callback, res) {
   var authUrl = oauth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: SCOPES
@@ -137,7 +139,7 @@ module.exports = {
               }
               // Authorize a client with the loaded credentials, then call the
               // Google Calendar API.
-              authorize(JSON.parse(content), callback);
+              authorize(JSON.parse(content), callback, res);
             });
         }
     }
