@@ -13,7 +13,7 @@ var router = express.Router();
 router.get('/',function(req,res,next) {
     async.parallel([
         getSchedule,
-        gcal.getITOut,
+        gcal.getITOut(res),
         getNotices,
         getTips
     ], function(err,result) {

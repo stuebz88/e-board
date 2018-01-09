@@ -10,7 +10,7 @@ html(lang="en")
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
         script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
     body
-        img(src='https://scontent-ort2-1.xx.fbcdn.net/v/t31.0-8/19093000_10155321947798771_386551658638166280_o.jpg?oh=07859745ddd75673bd5f49a795f83381&oe=5AC07790')
+        img#bgimg(src='https://i.imgur.com/FuO35Sw.jpg')
         .bg
         .container-fluid(style='z-index: 1;')
             .row
@@ -25,6 +25,44 @@ html(lang="en")
                                 td
                                     a(href='/admin') Admin
             .row
-                h1 UW Oshkosh IT Help Desk
+                h1#title UW Oshkosh IT Help Desk
             block content
+    script.
+        var urls = ['https://i.imgur.com/FuO35Sw.jpg','https://i.imgur.com/dyorm7p.jpg',
+                    'https://i.imgur.com/87xDbLK.jpg','https://i.imgur.com/bxrwKkV.jpg',
+                    'https://i.imgur.com/qGphU4g.jpg','https://imgur.com/B6WVL4j.jpg',
+                    'https://i.imgur.com/ZXwwIw7.jpg','https://i.imgur.com/wAVxUv7.jpg',
+                    'https://i.imgur.com/kuA2azd.jpg','https://i.imgur.com/11FlDlk.jpg',
+                    'https://i.imgur.com/q7wo9IU.jpg','https://i.imgur.com/WosKbwZ.jpg',
+                    'https://i.imgur.com/8CIrjHk.jpg','https://i.imgur.com/zytGSot.jpg'];
+        var pic = 0;
+        var opacity = 0.1;
+        function fadeOut() {
+            opacity = 0.1;
+            var fadeOut = setInterval(function() {
+                if(Math.round(1000*opacity)===0) {
+                    pic = (pic+1)%14;
+                    document.getElementById('bgimg').src=urls[pic];
+                    window.setTimeout(fadeIn,500);
+                    clearInterval(fadeOut);
+                } else {
+                    opacity -= 0.00025;
+                    document.getElementById('bgimg').style.opacity = opacity;
+                }
+            }, 5);
+        }
+        function fadeIn() {
+            opacity = 0.0;
+            var fadeIn = setInterval(function() {
+                if(Math.round(1000*opacity)===100) {
+                    clearInterval(fadeIn);
+                } else {
+                    opacity += 0.00025;
+                    document.getElementById('bgimg').style.opacity = opacity;
+                }
+            }, 5);
+        }
+        setInterval(function() {
+            fadeOut();
+        }, 30000);
     block scripts

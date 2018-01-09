@@ -9,6 +9,7 @@ var fs = require('fs');
 
 var index = require('./routes/index');
 var admin = require('./routes/admin');
+var googleapi = require('./routes/googleapi');
 
 var app = express();
 //app.set('port', process.env.PORT || 8000);
@@ -42,6 +43,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/admin', admin);
+app.use('/googleapi', googleapi)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

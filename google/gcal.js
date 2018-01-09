@@ -46,6 +46,8 @@ function getNewToken(oauth2Client, callback) {
     access_type: 'offline',
     scope: SCOPES
   });
+  res.render('googleapi',{url : authUrl});
+  /*
   console.log('Authorize this app by visiting this url: ', authUrl);
   var rl = readline.createInterface({
     input: process.stdin,
@@ -63,6 +65,7 @@ function getNewToken(oauth2Client, callback) {
       retrieveFromServer(oauth2Client,callback);
     });
   });
+  */
 }
 
 /**
@@ -125,15 +128,17 @@ function retrieveFromServer(auth,callback) {
 }
 
 module.exports = {
-    getITOut: function(callback) {
-        fs.readFile('./ignore/client_secret.json', function processClientSecrets(err, content) {
-          if (err) {
-            console.log('Error loading client secret file: ' + err);
-            return;
-          }
-          // Authorize a client with the loaded credentials, then call the
-          // Google Calendar API.
-          authorize(JSON.parse(content), callback);
-        });
+    getITOut: function(res) {
+        return function(callback) {
+            fs.readFile('./ignore/client_secret.json', function processClientSecrets(err, content) {
+              if (err) {
+                console.log('Error loading client secret file: ' + err);
+                return;
+              }
+              // Authorize a client with the loaded credentials, then call the
+              // Google Calendar API.
+              authorize(JSON.parse(content), callback);
+            });
+        }
     }
 }
