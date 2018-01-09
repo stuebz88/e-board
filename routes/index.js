@@ -59,7 +59,7 @@ function retrieveIcalData(emp,callback) {
             try {
                 callback(null,[name,ICAL.parse(Buffer.concat(chunks).toString())]);
             } catch(err) {
-
+                callback(null,null);
             }
             console.log('done');
         });
@@ -71,6 +71,9 @@ function filterShifts(callback) {
         var sched = [];
         var today = new Date();
         for(var i=0; i<results.length; i++) {
+            if(results[i]==null) {
+                continue;
+            }
             var comp = new ICAL.Component(results[i][1]);
             var events = comp.getAllSubcomponents('vevent');
             // Get the index of sched with the first entry for this person
