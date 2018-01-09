@@ -24,14 +24,12 @@ function authorize(credentials, callback, res) {
   var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
   // Check if we have previously stored a token.
   fs.readFile(TOKEN_PATH, function(err, token) {
-      getNewToken(oauth2Client,callback,res);
-      /*
     if (err) {
       getNewToken(oauth2Client,callback);
     } else {
       oauth2Client.credentials = JSON.parse(token);
       retrieveFromServer(oauth2Client,callback);
-    }*/
+    }
   });
 }
 
