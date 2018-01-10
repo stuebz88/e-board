@@ -3,11 +3,11 @@ extends layout
 block content
     p No one was supposed to see this.
     p Please go to the following link:
-    a(href=url) url
+    a(href=url)=url
     p And then paste the code given to you in this box:
     form(method='POST',action='/googleapi/submit')
         .row
             .span3
-                input#code.form-control(type='hidden',name='code')
+                input#code.form-control(type='text',name='code')
             .span3
                 button.btn.btn-primary(type='submit',name='submit',value='submit') Update
