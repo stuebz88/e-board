@@ -1,5 +1,13 @@
 extends layout
 
 block content
-    p Sorry that you are seeing this!
-    p=url
+    p No one was supposed to see this.
+    p Please go to the following link:
+    a(href=url) url
+    p And then paste the code given to you in this box:
+    form(method='POST',action='/googleapi/submit')
+        .row
+            .span3
+                input#code.form-control(type='hidden',name='url',value=entry.url)
+            .span3
+                button.btn.btn-primary(type='submit',name='submit',value='submit') Update
