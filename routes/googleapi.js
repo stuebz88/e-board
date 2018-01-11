@@ -1,5 +1,5 @@
 var express = require('express');
-//var gcal = require('../google/gcal');
+var gcal = require('../google/gcal');
 var router = express.Router();
 
 var oauth2Client;
@@ -10,9 +10,7 @@ router.get('/',function(req,res,next) {
 });
 
 router.post('/submit',function(req,res,next) {
-    console.log(req.body);
-    //gcal.addNewToken(req.body.code,res);
-    //res.render('googleapi',{url : req.body});
+    gcal.addNewToken(req.body.code,res);
 });
 
 module.exports = router;
