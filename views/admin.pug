@@ -1,44 +1,54 @@
-extends layout
-
-block content
-    .container-fluid
-        h2 Edit notices
-        form(method='POST',action='/admin/notices')
-            .row
-                .span6
-                    textarea(name='notices' rows='10' style='width:600px;')=notices[0].text
-            .row
-                .span6
-                    button.btn.btn-primary(type='submit',name='noticeBtn',value='Update') Update
-        a(href='/admin/tips') Edit tips
-        h2 Edit existing workers
-        .row
-            .span3
-                h3 Name
-            .span3
-                h3 Nickname
-        each entry in emps
-            form(method='POST',action='/admin/rename')
+doctype html
+html(lang="en")
+    head
+        title= title
+        meta(charset='utf-8')
+        //-meta(name='viewport', content='width=device-width, initial-scale=1')
+        link(rel='stylesheet', href='/bootstrap/css/bootstrap.min.css')
+        link(rel='stylesheet', href='/bootstrap/css/bootstrap-responsive.min.css')
+        //-link(rel='stylesheet', href='stylesheets/style.css')
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+    body
+        a(href='/') Home
+        .container-fluid
+            h2 Edit notices
+            form(method='POST',action='/admin/notices')
                 .row
-                    .span3
-                        p=entry.name
-                    .span3
-                        .form-group
-                            label(for='url',class='visuallyhidden')
-                            input#url.form-control(type='hidden',name='url',value=entry.url)
-                            label(for='nickname',class='visuallyhidden')
-                            input#nickname.form-control(type='text',name='name',value=entry.nickname)
-                    .span3
-                        button.btn.btn-primary(type='submit',name='submit',value='submit') Update
-                        button.btn.btn-primary(type='submit',name='delete',value='delete',style='background:#FF0000') Delete
-        h2 Add new worker
-        .row
-            form(method='POST',action='/admin')
+                    .span6
+                        textarea(name='notices' rows='10' style='width:600px;')=notices[0].text
+                .row
+                    .span6
+                        button.btn.btn-primary(type='submit',name='noticeBtn',value='Update') Update
+            a(href='/admin/tips') Edit tips
+            h2 Edit existing workers
+            .row
                 .span3
-                    p Enter URL of ICAL data:
+                    h3 Name
                 .span3
-                    div.form-group
-                        input#url.form-control(type='text',name='url',required='true')
-                .span3
-                    button.btn.btn-primary(type='submit') Submit
-        p(style='color:#FF0000')=err
+                    h3 Nickname
+            each entry in emps
+                form(method='POST',action='/admin/rename')
+                    .row
+                        .span3
+                            p=entry.name
+                        .span3
+                            .form-group
+                                label(for='url',class='visuallyhidden')
+                                input#url.form-control(type='hidden',name='url',value=entry.url)
+                                label(for='nickname',class='visuallyhidden')
+                                input#nickname.form-control(type='text',name='name',value=entry.nickname)
+                        .span3
+                            button.btn.btn-primary(type='submit',name='submit',value='submit') Update
+                            button.btn.btn-primary(type='submit',name='delete',value='delete',style='background:#FF0000') Delete
+            h2 Add new worker
+            .row
+                form(method='POST',action='/admin')
+                    .span3
+                        p Enter URL of ICAL data:
+                    .span3
+                        div.form-group
+                            input#url.form-control(type='text',name='url',required='true')
+                    .span3
+                        button.btn.btn-primary(type='submit') Submit
+            p(style='color:#FF0000')=err
