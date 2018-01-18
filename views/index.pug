@@ -28,17 +28,17 @@ block content
                     hr(style='width:0vw;border-color:#000000')
                     .row
                         h2 Schedule
-                        table(class='table table-striped' style='font-size: 175%')
+                        table(class='table table-striped' style='font-size: 175%;table-layout:fixed')
                             thead
                                 tr(style='color:#E5E5E5')
-                                    th Time
+                                    th(style='width:250px') Time
                                     th Name
                                     th(style='text-align:center') Voicemail
                                     th(style='text-align:center') Email
-                            tbody
+                            tbody(style='font-size: 150%')
                                 - var i = 0;
                                 each entry in schedule
-                                    tr
+                                    tr(style='height:50px;line-height:15px;')
                                         - var startTime = entry[0].toLocaleTimeString().slice(0,-6)
                                         if(i%2==0)
                                             td=entry[0].toLocaleTimeString().slice(0,-6)+'-'+entry[1].toLocaleTimeString().slice(0,-6)
