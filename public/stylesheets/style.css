@@ -49,3 +49,25 @@ p {
 a {
     color: #00B7FF;
 }
+
+button.btn.btn-primary {
+    color: #111111;
+    background: #98AFE7;
+    margin: auto;
+    display: block;
+    font-size: 15px;
+    height: 20px;
+    line-height: 10px;
+    border-radius: 4px;
+}
+
+.table-striped {
+    border: none;
+    border-collapse: separate;
+    border-spacing: 0 .2em;
+}
+
+.table-striped>tbody>tr:nth-child(even)>td {
+    color:#E5E5E5;
+    border: none;
+}

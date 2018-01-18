@@ -38,35 +38,23 @@ block content
                             tbody(style='font-size: 150%')
                                 - var i = 0;
                                 each entry in schedule
-                                    tr(style='height:50px;line-height:15px;')
+                                    tr(style='vertical-align:middle;')
                                         - var startTime = entry[0].toLocaleTimeString().slice(0,-6)
-                                        if(i%2==0)
-                                            td=entry[0].toLocaleTimeString().slice(0,-6)+'-'+entry[1].toLocaleTimeString().slice(0,-6)
-                                            td=entry[2]
-                                        else
-                                            td(style='color:#E5E5E5')=entry[0].toLocaleTimeString().slice(0,-6)+'-'+entry[1].toLocaleTimeString().slice(0,-6)
-                                            td(style='color:#E5E5E5')=entry[2]
+                                        td=entry[0].toLocaleTimeString().slice(0,-6)+'-'+entry[1].toLocaleTimeString().slice(0,-6)
+                                        td=entry[2]
                                         if roles[i]<0
                                             form(method='POST',action='/pickRole')
                                                 td
-                                                    button.btn.btn-primary(type='submit',name='voicemail',value=[roles[i],startTime],style='color:#111111;background:#98AFE7;margin:auto;display:block;font-size:15px;height:20px;line-height:10px;') &#10004;
+                                                    button.btn.btn-primary(type='submit',name='voicemail',value=[roles[i],startTime]) &#10004;
                                                 td
-                                                    button.btn.btn-primary(type='submit',name='email',value=[roles[i],startTime],style='color:#111111;background:#FF9999;margin:auto;display:block;font-size:15px;height:20px;line-height:10px;') &#10004;
+                                                    button.btn.btn-primary(type='submit',name='email',value=[roles[i],startTime],style='background:#FF9999;') &#10004;
                                         else if roles[i]>=0
                                             if roles[i]
-                                                if(i%2==0)
-                                                    td
-                                                    td(style='text-align:center') &#10004;
-                                                else
-                                                    td
-                                                    td(style='text-align:center;color:#E5E5E5') &#10004;
+                                                td
+                                                td(style='text-align:center') &#10004;
                                             else
-                                                if(i%2==0)
-                                                    td(style='text-align:center') &#10004;
-                                                    td
-                                                else
-                                                    td(style='text-align:center;color:#E5E5E5') &#10004;
-                                                    td
+                                                td(style='text-align:center') &#10004;
+                                                td
                                         else
                                             td
                                             td
