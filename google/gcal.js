@@ -99,8 +99,20 @@ function retrieveFromServer() {
         } else {
             for (var i = 0; i < events.length; i++) {
                 var event = events[i];
+                console.log('Event Start===============');
+                console.log(event);
                 var start = event.start.dateTime || event.start.date;
-                itout.push([event.creator.email,event.creator.displayName,event.start.dateTime,event.end.dateTime]);
+                var email = event.creator.email;
+                var displayName = event.creator.displayName;
+                if(event.attendees!=null) {
+                    for(var j=0; j<event.attendees.length; j++) {
+                        if(event.attendees[j].displayName!='itstaffout') {
+                            email = event.attendees[j].email;
+                            displayName = event.attendees[j].displayName;
+                        }
+                    }
+                }
+                itout.push([email,displayName,event.start.dateTime,event.end.dateTime]);
             }
             callback(null,itout.sort(function(a,b) {
                 if(a[0]<b[0]) return -1;
