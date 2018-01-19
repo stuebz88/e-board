@@ -5,11 +5,11 @@ block content
         .row(style='height:100vh;')
             .span6(style='width:45vw;')
                 .container-fluid
-                    .row(style='height:30vh;')
+                    //-.row(style='height:30vh;')
                             h2 Tips
                             .span6-text-center(style='padding-top:50px')
                                 p#tip
-                    hr(style='width:90vw;border-color:#000000')
+                    //-hr(style='width:90vw;border-color:#000000')
                     .row(style='padding-top:10px')
                             h2 IT Out
                             each entry in itout
@@ -21,11 +21,12 @@ block content
                                     p=entry[1] || entry[0]
                                     p=entry[2]
             .span6(style='width:45vw;')
-                .container-fluid(style='padding-left:50px;border-left:2px solid #333')
-                    .row(style='height:30vh;')
+                .container-fluid
+                    //-(style='padding-left:50px;border-left:2px solid #333')
+                    //-.row(style='height:30vh;')
                         h2 Notices
                         p=notices[0].text
-                    hr(style='width:0vw;border-color:#000000')
+                    //-hr(style='width:0vw;border-color:#000000')
                     .row
                         h2 Schedule
                         table(class='table table-striped' style='font-size: 175%;table-layout:fixed')

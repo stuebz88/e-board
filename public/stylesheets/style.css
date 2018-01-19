@@ -38,12 +38,13 @@ h1 {
 }
 
 h2 {
-    color:#98AFE7
+    color:#98AFE7;
+    font-size: 400%;
 }
 
 p {
     color: #E5E5E5;
-    font-size: 175%;
+    font-size: 275%;
 }
 
 a {
