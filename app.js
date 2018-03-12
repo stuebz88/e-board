@@ -12,6 +12,7 @@ var admin = require('./routes/admin');
 var googleapi = require('./routes/googleapi');
 
 var app = express();
+var expressWs = require('express-ws')(app);
 //app.set('port', process.env.PORT || 8000);
 app.set('port', process.env.PORT || 8000);
 app.listen(app.get('port'));
