@@ -1,0 +1,45 @@
+extends layout2
+
+block content
+    .row
+        .span6(style='width:45vw;')
+            p Column 1
+        .span6
+            table#sched(class='table table-striped' style='font-size: 175%;table-layout:fixed;margin:10px 0;')
+                thead
+                    tr(style='color:#E5E5E5')
+                        th(style='width:250px') Time
+                        th Name
+                        th(style='text-align:center') Voicemail
+                        th(style='text-align:center') Email
+                    tbody(style='font-size: 150%')
+                        - var i = 0;
+                        each entry in schedule
+                            tr(style='vertical-align:middle;')
+                                - var startTime = entry[0].toLocaleTimeString().slice(0,-6)
+                                td=entry[0].toLocaleTimeString().slice(0,-6)+'-'+entry[1].toLocaleTimeString().slice(0,-6)
+                                td=entry[2]
+                                if roles[i]<0
+                                    form(method='POST',action='/pickRole')
+                                        td
+                                            button.btn.btn-primary(type='submit',name='voicemail',value=[roles[i],startTime]) &#10004;
+                                        td
+                                            button.btn.btn-primary(type='submit',name='email',value=[roles[i],startTime],style='background:#FF9999;') &#10004;
+                                else if roles[i]>=0
+                                    if roles[i]
+                                        td
+                                        td(style='text-align:center') &#10004;
+                                    else
+                                        td(style='text-align:center') &#10004;
+                                        td
+                                else
+                                    td
+                                    td
+                            - i++;
+block scripts
+    script.
+        var fetch = require('node-fetch');
+        var sched = document.getElementById('sched');
+        var row = sched.insertRow(0);
+        var time = row.insertCell(0);
+        time.innerHTML = 'test';
